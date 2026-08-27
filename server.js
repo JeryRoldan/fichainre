@@ -39,6 +39,7 @@ const server = http.createServer((request, response) => {
   }
   if (url.pathname.startsWith('/descargar-excel/')) { const company = url.pathname.endsWith('informaperu') ? 'informaperu' : 'inre'; return serveFile(response, path.join(dataRoot, company, `fichas-${company}.csv`)); }
   if (['/','/inre','/inre/','/informaperu','/informaperu/'].includes(url.pathname)) return serveFile(response, path.join(root, 'index.html'));
+  if (/^\/(inre|informaperu)\/assets\//.test(url.pathname)) return serveFile(response, path.join(root, url.pathname.replace(/^\/(inre|informaperu)\//, '')));
   const file = path.resolve(root, decodeURIComponent(url.pathname).replace(/^\/+/, '')); if (!file.startsWith(path.resolve(root) + path.sep)) return send(response, 403, 'Acceso denegado'); serveFile(response, file);
 });
 server.listen(8000, '0.0.0.0', () => console.log('INRE: http://192.168.1.10:8000/inre/\nInformaPerú: http://192.168.1.10:8000/informaperu/'));
